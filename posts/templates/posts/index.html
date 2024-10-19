@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Single Post Platform</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Dark Mode Styles */
+        .dark-mode {
+            background-color: #121212;
+            color: white;
+        }
+
+        .dark-mode a {
+            color: #00aaff;
+        }
+
+        /* Username masking */
+        .username-masked {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5">
+    <!-- Dark Mode Toggle -->
+    <div class="d-flex justify-content-end">
+        <button id="toggle-dark-mode" class="btn btn-secondary mb-3">Toggle Dark Mode</button>
+    </div>
+
+    <!-- Post List -->
+    <div id="post-list">
+        <h1>Posts</h1>
+        <!-- Loop through posts (Django template context) -->
+        {% for post in page_obj %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <!-- Post Content -->
+                <p class="card-text">
+                    {{ post.content|truncatechars:100 }}
+                    {% if post.content|length > 100 %}
+                        <a href="{% url 'post_detail' post.id %}">see more</a>
+                    {% endif %}
+                </p>
+                <!-- Masked Username -->
+                <p class="username-masked">{{ post.user.username|slice:":ad***123" }}</p>
+                <!-- Post Date -->
+                <small class="text-muted">Posted on: {{ post.created_at|date:"Y-m-d" }}</small>
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Pagination -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+
+                {% for i in page_obj.paginator.page_range %}
+                <li class="page-item {% if page_obj.number == i %}active{% endif %}">
+                    <a class="page-link" href="?page={{ i }}">{{ i }}</a>
+                </li>
+                {% endfor %}
+
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Bootstrap JS and Dark Mode Toggle Script -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    // Dark Mode Toggle Functionality
+    document.getElementById('toggle-dark-mode').onclick = function() {
+        document.body.classList.toggle('dark-mode');
+    }
+</script>
+
+</body>
+</html>

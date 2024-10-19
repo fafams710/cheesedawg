@@ -1,0 +1,9 @@
+{% extends 'posts/base.html' %}
+
+{% block title %}Post Detail{% endblock %}
+
+{% block content %}
+<h2>{{ post.user.username }}'s Post</h2>
+<p>{{ post.content }}</p>
+<p><small class="text-muted">Posted on {{ post.created_at|date:"Y-m-d" }}</small></p>
+{% endblock %}

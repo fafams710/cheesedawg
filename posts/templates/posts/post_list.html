@@ -1,0 +1,18 @@
+{% extends 'posts/base.html' %}
+
+{% block title %}Posts{% endblock %}
+
+{% block content %}
+<h2>Posts</h2>
+{% if user.is_authenticated %}
+    <p>Welcome, {{ user.username }}! <a href="{% url 'logout' %}">Logout</a></p>
+{% else %}
+    <p><a href="{% url 'login' %}">Login</a></p>
+{% endif %}
+
+<ul>
+    {% for post in posts %}
+        <li>{{ post.content }} - {{ post.created_at }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}

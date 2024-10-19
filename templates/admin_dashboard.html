@@ -1,0 +1,60 @@
+{% extends 'posts/base.html' %}
+
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<h2>Admin Dashboard</h2>
+<h3>User Registrations</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Email</th>
+            <th>Username</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ user.email }}</td>
+            <td>{{ user.username }}</td>
+            <td>
+                <a href="{% url 'approve_user' user.id %}" class="btn btn-success">Approve</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No users to approve.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<h3>Reports</h3>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Reporter</th>
+            <th>Post</th>
+            <th>Message</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for report in reports %}
+        <tr>
+            <td>{{ report.reporter.username }}</td>
+            <td>{{ report.post.id }}</td>
+            <td>{{ report.message }}</td>
+            <td>
+                <a href="{% url 'delete_report' report.id %}" class="btn btn-danger">Delete</a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4">No reports available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
